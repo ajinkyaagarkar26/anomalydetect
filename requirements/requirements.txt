@@ -1,0 +1,13 @@
+pandas
+numpy  
+tqdm
+datetime
+regex
+scikit-learn
+torch
+matplotlib
+seaborn
+boto3
+fastapi
+uvicorn
+python-multipart
