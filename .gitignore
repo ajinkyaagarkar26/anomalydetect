@@ -1,8 +1,7 @@
 # Bytecode
-__pycache__/
-logdeep/dataset/__pycache__/*
+**/__pycache__/
 **/*.pyc
-*.pyo
+
 
 # Distribution / packaging
 .Python
