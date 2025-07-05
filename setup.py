@@ -6,7 +6,7 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 # Package meta-data.
-NAME = 'Anomaly Detect'
+NAME = 'AnomalyDetect'
 DESCRIPTION = "Anomaly Detection Model"
 EMAIL = "------"
 AUTHOR = "----------"
