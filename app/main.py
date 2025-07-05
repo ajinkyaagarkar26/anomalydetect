@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from fastapi import FastAPI, Request, File, UploadFile, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -32,3 +38,7 @@ async def handle_train(request: Request, base_log: UploadFile = File(...), label
     # result_output = f"✅ DeepLog: {deeplog_result}<br>✅ LogAnomaly: {loganomaly_result}"
     result_output = f"✅ DeepLog: {deeplog_result}"
     return templates.TemplateResponse("index.html", {"request": request, "result": result_output})
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8001) 
