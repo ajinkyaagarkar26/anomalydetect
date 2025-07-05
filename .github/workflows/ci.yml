@@ -25,7 +25,7 @@ jobs:
     - name: Train
       run: python deeplog.py train
     - name: Test
-      run: python deeplog.py test
+      run: python deeplog.py predict
     - uses: actions/upload-artifact@v4
       with:
         name: trained-pipeline
