@@ -4,7 +4,7 @@ tqdm
 datetime
 regex
 scikit-learn
-torch
+torch --index-url https://download.pytorch.org/whl/cpu
 matplotlib
 seaborn
 boto3
