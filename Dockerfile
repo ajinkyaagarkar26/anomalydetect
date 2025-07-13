@@ -1,16 +1,32 @@
-# pull python base image
-FROM python:3.10-slim
+# Build stage
+FROM python:3.10-slim as builder
 
-# set work directory
+# Set work directory
 WORKDIR /app
 
-# copy project
-COPY . /app
+# Copy requirements first for better caching
+COPY requirements/ /app/requirements/
 
-# install dependencies
-# Assuming requirements.txt is in the root, if it's elsewhere, adjust the path.
+# Install dependencies in a virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir -r requirements/requirements.txt
 
+# Runtime stage
+FROM python:3.10-slim
+
+# Copy virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Set work directory
+WORKDIR /app
+
+# Copy project files
+COPY logdeep/ /app/logdeep/
+COPY logparser/ /app/logparser/
+COPY app/ /app/app/
+COPY deeplog.py /app/
 
 # expose port
 EXPOSE 8000
