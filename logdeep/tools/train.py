@@ -5,6 +5,7 @@ import gc
 import os
 import sys
 import time
+import math
 sys.path.append('../../')
 
 import seaborn as sns
@@ -72,8 +73,8 @@ class Trainer():
                                             scale=None,
                                             scale_path=scale_path,
                                             min_len=self.min_len)
-
             train_logkeys, valid_logkeys, train_times, valid_times = train_test_split(logkeys, times, test_size=self.valid_ratio)
+
 
             print("Loading vocab")
             with open(self.vocab_path, 'rb') as f:
@@ -196,6 +197,7 @@ class Trainer():
     def save_log(self):
         try:
             for key, values in self.log.items():
+                #print(f"Saving logs for {key} with values: {values}")
                 pd.DataFrame(values).to_csv(self.save_dir + key + "_log.csv",
                                             index=False)
             print("Log saved")
@@ -218,20 +220,23 @@ class Trainer():
         total_losses = 0
         for i, (log, label) in enumerate(tbar):
             features = []
+            #print(f"Processing log: {log}")
             for value in log.values():
                 features.append(value.clone().detach().to(self.device))
 
             # output is log key and timestamp
+            # print(f"features: {features}, label: {label}")
             output = self.model(features=features, device=self.device)
             output = output.squeeze()
             label = label.view(-1).to(self.device)
 
             loss = self.criterion(output, label)
-
-            total_losses += float(loss)
+            #print(f"loss logged {loss}")
+            if not math.isnan(float(loss)):
+                total_losses += float(loss)
             loss /= self.accumulation_step
             loss.backward()
-
+            #print(f"total loss logged {total_losses}")
             # Basically it involves making optimizer steps after several batches
             # thus increasing effective batch size.
             # https: // www.kaggle.com / c / understanding_cloud_organization / discussion / 105614
